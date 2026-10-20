@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Header, Sidebar, StatusBar } from '@/components/Chrome';
 import { StatCards, FilterBar, IssueCard } from '@/components/Board';
 import Detail from '@/components/Detail';
-import { NewFeedback, IdentityModal, HelpModal, PreviewModal, SyncModal } from '@/components/Modals';
+import { NewFeedback, IdentityModal, HelpModal, PreviewModal, SyncModal, ConfirmDelete } from '@/components/Modals';
 import { STATUS_KEYS, statusKey, useIdentity } from '@/lib/ui';
 
 export default function Home() {
@@ -148,9 +148,9 @@ export default function Home() {
   };
 
   async function remove() {
-    if (!selected || !confirm(`Delete #FB-${selected.id} and its history? This cannot be undone.`)) return;
+    if (!selected) return;
     await fetch(`/api/feedback/${selected.id}`, { method: 'DELETE' });
-    setSelectedId(null); setDetailOpen(false);
+    setModal(null); setSelectedId(null); setDetailOpen(false);
     say('Issue deleted');
     load();
   }
@@ -204,7 +204,7 @@ export default function Home() {
               {selected ? (
                 <Detail key={selected.id} item={selected} me={me} focusNonce={focusNonce}
                   needName={() => setModal('identity')} onChanged={onChanged}
-                  onClose={() => { setSelectedId(null); setDetailOpen(false); }} onNext={nextIssue} onDelete={remove} />
+                  onClose={() => { setSelectedId(null); setDetailOpen(false); }} onNext={nextIssue} onDelete={() => setModal('delete')} />
               ) : (
                 <aside className="detail empty-detail">
                   <p>Select an issue to see its history and verify or reopen it.</p>
@@ -222,7 +222,8 @@ export default function Home() {
       {modal === 'identity' && <IdentityModal me={me} onSave={saveMe} onClose={() => setModal(null)} />}
       {modal === 'help' && <HelpModal onClose={() => setModal(null)} />}
       {modal === 'preview' && <PreviewModal query={exportQuery} onClose={() => setModal(null)} />}
-      {modal === 'sync' && <SyncModal onClose={() => setModal(null)} onSynced={load} />}
+      {modal === 'delete' && selected && <ConfirmDelete item={selected} onConfirm={remove} onClose={() => setModal(null)} />}
+      {modal === 'sync' &&<SyncModal onClose={() => setModal(null)} onSynced={load} />}
       <div className={`toast ${toast ? 'show' : ''}`} role="status">{toast}</div>
     </div>
   );

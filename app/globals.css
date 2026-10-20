@@ -388,3 +388,10 @@ img { display: block; }
 .check { display: flex !important; align-items: center; gap: 8px; font-weight: 500; }
 .check input { width: auto; }
 .sync-tip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 8px 12px; border: 1px dashed var(--accent-line); border-radius: 8px; background: var(--accent-tint); font-size: 12px; }
+
+/* Delete confirmation */
+.btn-danger { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border: 0; border-radius: 4px; background: var(--danger); color: #fff; font-size: 12px; font-weight: 600; }
+.btn-danger:hover:not(:disabled) { filter: brightness(1.1); }
+.btn-danger:disabled { opacity: .6; cursor: default; }
+.del-card { padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 8px; background: var(--tint); font-size: 13px; }
+.del-card p { margin-top: 4px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }

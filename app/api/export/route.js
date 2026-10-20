@@ -1,4 +1,4 @@
-import { listFeedback, PERSONAS } from '@/lib/db';
+import { listFeedback, AREAS, PERSONAS } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,12 +7,15 @@ const labelOf = (i) => (i.status === 'open' && i.reopened_ever ? 'Reopened' : LA
 
 // Markdown export, grouped by persona then area. Honors the same filters as the list.
 export async function GET(req) {
-  const items = (await listFeedback(new URL(req.url).searchParams)).reverse();
+  const params = new URL(req.url).searchParams;
+  const items = (await listFeedback(params)).reverse();
   const today = new Date().toISOString().slice(0, 10);
+  // Name the file after the area / persona it was filtered to, e.g. feedback-ui-clients-2026-10-20.md
+  const scope = [params.get('area'), params.get('persona')].filter((v) => AREAS.includes(v) || PERSONAS.includes(v));
   const count = (s) => items.filter((i) => i.status === s && !i.reopened_ever).length;
   const reopened = items.filter((i) => i.status === 'open' && i.reopened_ever).length;
   const out = [
-    '# Feedback export', '',
+    `# Feedback export${scope.length ? ` — ${scope.join(' · ')}` : ''}`, '',
     `_${today} · ${items.length} item${items.length === 1 ? '' : 's'}_`, '',
     `**Open:** ${count('open')} · **In progress:** ${items.filter((i) => i.status === 'in-progress').length} · **Awaiting verification:** ${items.filter((i) => i.status === 'fixed').length} · **Verified:** ${items.filter((i) => i.status === 'verified').length} · **Reopened:** ${reopened}`, '',
   ];
@@ -34,12 +37,12 @@ export async function GET(req) {
       out.push('');
     }
   }
-  if (!items.length) out.push('_No feedback yet._', '');
+  if (!items.length) out.push(scope.length ? '_No feedback matches this filter._' : '_No feedback yet._', '');
 
   return new Response(out.join('\n'), {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
-      'Content-Disposition': `attachment; filename="feedback-${today}.md"`,
+      'Content-Disposition': `attachment; filename="${['feedback', ...scope.map((s) => s.toLowerCase()), today].join('-')}.md"`,
     },
   });
 }

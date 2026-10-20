@@ -77,6 +77,27 @@ export function NewFeedback({ me, onClose, onSaved }) {
   );
 }
 
+export function ConfirmDelete({ item, onConfirm, onClose }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <Modal title="Delete this issue?" onClose={onClose}>
+      <div className="form">
+        <div className="del-card">
+          <strong>#FB-{item.id} · {item.section}</strong>
+          <p>{item.description}</p>
+        </div>
+        <p className="modal-copy">This permanently deletes the issue and its whole history. It can’t be undone.</p>
+        <div className="form-foot">
+          <button className="btn-soft" onClick={onClose} autoFocus>Cancel</button>
+          <button className="btn-danger" disabled={busy} onClick={async () => { setBusy(true); await onConfirm(); }}>
+            {busy ? 'Deleting…' : 'Delete issue'}
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 export function IdentityModal({ me, onSave, onClose }) {
   const [v, setV] = useState(me);
   const ref = useRef();
