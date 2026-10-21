@@ -24,7 +24,7 @@ export async function POST(req, { params }) {
 export async function PATCH(req, { params }) {
   const id = await idOf(params);
   const b = await req.json().catch(() => ({}));
-  const r = await updateDetails(id, b.actor, { section: b.section, area: b.area, persona: b.persona, name: b.name });
+  const r = await updateDetails(id, b.actor, { section: b.section, area: b.area, persona: b.persona, name: b.name, description: b.description });
   if (r.error) return NextResponse.json({ error: r.error }, { status: r.code });
   return NextResponse.json(await getFeedback(id));
 }

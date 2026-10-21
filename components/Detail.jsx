@@ -16,7 +16,7 @@ const EVENT_TEXT = {
 
 // Confirm or correct Section / Area / Persona. Saving clears the "needs review" flag.
 function DetailsForm({ item, me, needName, onSaved, onCancel }) {
-  const [f, setF] = useState({ section: item.section, area: item.area, persona: item.persona, name: item.name || '' });
+  const [f, setF] = useState({ section: item.section, area: item.area, persona: item.persona, name: item.name || '', description: item.description });
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
   const set = (k) => (e) => setF((x) => ({ ...x, [k]: e.target.value }));
@@ -45,6 +45,9 @@ function DetailsForm({ item, me, needName, onSaved, onCancel }) {
       )}
       <label>Section / feature
         <input value={f.section} onChange={set('section')} maxLength={120} required />
+      </label>
+      <label>Description
+        <textarea value={f.description} onChange={set('description')} maxLength={4000} required />
       </label>
       <div className="form-row">
         <label>Area

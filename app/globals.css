@@ -380,7 +380,7 @@ img { display: block; }
 .review-box strong { display: block; font-size: 12px; color: #78350f; }
 .review-box p { font-size: 12px; line-height: 18px; color: #78350f; }
 .review-box label { display: grid; gap: 4px; font-size: 11px; font-weight: 500; }
-.review-box input, .review-box select { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-size: 13px; font-weight: 400; }
+.review-box input, .review-box select, .review-box textarea { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-size: 13px; font-weight: 400; }
 .review-box .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .review-box .form-err { color: var(--danger); font-size: 12px; }
 .sync-free { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 8px; background: var(--tint); font-size: 12px; }
@@ -395,3 +395,4 @@ img { display: block; }
 .btn-danger:disabled { opacity: .6; cursor: default; }
 .del-card { padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 8px; background: var(--tint); font-size: 13px; }
 .del-card p { margin-top: 4px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.review-box textarea { min-height: 90px; resize: vertical; font: inherit; }
